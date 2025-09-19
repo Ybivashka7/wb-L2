@@ -2,16 +2,24 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/beevik/ntp"
 )
 
-func main() {
-	// используем NPT библиотеку
-	time, err := ntp.Time("0.beevik-ntp.pool.ntp.org")
-	// Обрабатываем ошибку
+// Функция NPT сервер  обернута  для проверки vet  и идиомантичности golint
+func NTPTime() error {
+	currentTime, err := ntp.Time("0.beevik-ntp.pool.ntp.org")
 	if err != nil {
-		fmt.Println("Ошибка получения времени ", err)
+		return fmt.Errorf("failed to get time: %w", err)
 	}
-	// выводим полученное время
-	fmt.Println(time)
+	fmt.Println("Current time:", currentTime)
+	return nil
+}
+
+func main() {
+	if err := NTPTime(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }

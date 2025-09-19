@@ -1,4 +1,4 @@
-module L2.8
+module wb-tech-L2
 
 go 1.25.0
 
